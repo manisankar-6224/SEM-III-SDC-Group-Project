@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A World Without Empty Plates | Food Donation App</title>
+<style>
+/* ---------- GLOBAL ---------- */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff8f0;
+  color: #333;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.hidden {
+  display: none;
+}
+section {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* ---------- HEADER ---------- */
+header {
+  background-image: url('https://images.unsplash.com/photo-1604909053172-c3b4c93e98db');
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+header h1 {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  font-size: 2.5em;
+  border-radius: 10px;
+}
+
+/* ---------- NAV ---------- */
+nav {
+  background-color: #ff5722;
+  padding: 10px;
+  text-align: center;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ---------- LOGIN PAGE ---------- */
+#login-page {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: #f9f9f9;
+}
+#login-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 320px;
+  text-align: center;
+}
+#login-form input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+}
+#login-form button {
+  width: 100%;
+  padding: 10px;
+  background: #ff5722;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* ---------- CARDS ---------- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.card {
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  width: 250px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.card h3 {
+  padding: 12px;
+  font-size: 1.1em;
+  background: #fafafa;
+}
+
+/* ---------- QUOTES ---------- */
+.quotes-section {
+  background: #ffe4d1;
+  padding: 30px 15px;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 30px;
+}
+.quotes-section h2 {
+  margin-bottom: 20px;
+  color: #d84315;
+}
+.quote {
+  font-style: italic;
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #444;
+}
+
+/* ---------- FORMS ---------- */
+form input, form select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+form {
+  max-width: 600px;
+  margin: auto;
+}
+input[type="submit"], .btn {
+  background-color: #3fb36f;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+}
+.btn.secondary {
+  background: #6fbb97;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 30px;
+  margin-top: 30px;
+}
+
+/* ---------- DONATE SECTION ---------- */
+.donate-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+.status {
+  font-size: 14px;
+  margin-top: 10px;
+}
+.status.success {
+  color: green;
+  font-weight: bold;
+}
+
+/* ---------- EMBEDDED MINI APP ---------- */
+.container {
+  max-width: 500px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.container button:hover {
+  background-color: #0056b3;
+}
+.container input, .container select, .container textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+<!-- ---------- LOGIN PAGE ---------- -->
+<div id="login-page">
+  <div id="login-form">
+    <h2>Login</h2>
+    <input type="text" id="login-id" placeholder="Enter User ID" />
+    <input type="password" id="login-password" placeholder="Enter Password" />
+    <button onclick="validateLogin()">Login</button>
+    <p id="error-message"></p>
+  </div>
+</div>
+
+<!-- ---------- HOME PAGE ---------- -->
+<div id="home-page" class="hidden">
+  <header>
+    <h1>ZERO HUNGER</h1>
+  </header>
+  <nav>
+    <a onclick="showSection('mission')">Home</a>
+    <a onclick="showSection('donate')">Donate Food</a>
+    <a onclick="showSection('foodApp')">Food App</a>
+    <a onclick="showSection('agent')">Become an Agent</a>
+    <a onclick="showSection('contact')">Contact</a>
+  </nav>
+
+  <!-- ---------- Mission Section ---------- -->
+  <section id="mission">
+    <h2>Our Mission</h2>
+    <p style="text-align:center;font-size:1.1em;">
+      We connect surplus food with those who need it the most. Join us in making India hunger-free.
+    </p>
+    <h2>Traditional Indian Foods</h2>
+    <div class="cards">
+      <div class="card"><img src="hyderabadi-chicken-biryani-food-photos_410516-42775.jpg"><h3>Chicken Biryani</h3></div>
+      <div class="card"><img src="chapati-chicken-curry-plate_1106454-136228.jpg"><h3>Chapati & Curry</h3></div>
+      <div class="card"><img src="Idli-and-Sambar-1.jpg"><h3>Idli & Sambar</h3></div>
+      <div class="card"><img src="a4a2042d3c42ba82478970e55a17d40c.jpg"><h3>South Indian Thali</h3></div>
+    </div>
+    <div class="quotes-section">
+      <h2>Motivational Quotes</h2>
+      <p class="quote">"If you can't feed a hundred people, then feed just one." – Mother Teresa</p>
+      <p class="quote">"No one has ever become poor by giving." – Anne Frank</p>
+    </div>
+  </section>
+
+  <!-- ---------- Donate Section ---------- -->
+  <section id="donate" class="hidden">
+    <h2>Donate Food</h2>
+    <div class="donate-card">
+      <h3>Make a Donation</h3>
+      <label>Name:</label>
+      <input id="donor-name" type="text" placeholder="Your name" />
+      <label>Donation Amount ($):</label>
+      <input id="donation-amount" type="number" min="1" step="0.01" placeholder="Amount" />
+      <label>Country:</label>
+      <input id="country" type="text" placeholder="Country" />
+      <button id="donate-btn" class="btn">Donate Now</button>
+      <p id="donation-response" class="status"></p>
+    </div>
+  </section>
+
+  <!-- ---------- Combined Food App Section ---------- -->
+  <section id="foodApp" class="hidden">
+    <div class="container">
+      <h2>Food Donation App</h2>
+      <div id="roleSelect">
+        <p>Are you a:</p>
+        <button onclick="selectRole('donor')">Donor</button>
+        <button onclick="selectRole('volunteer')">Volunteer</button>
+      </div>
+
+      <div id="loginRegister" class="hidden">
+        <p>Are you a new user?</p>
+        <button onclick="loginChoice(true)">Yes (Login)</button>
+        <button onclick="loginChoice(false)">No (Register)</button>
+      </div>
+
+      <div id="authForm" class="hidden">
+        <h3 id="authTitle"></h3>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="authenticate()">Submit</button>
+      </div>
+
+      <div id="donorDashboard" class="hidden">
+        <h3>Donor Dashboard</h3>
+        <label>Food Type:</label>
+        <input type="text" id="foodType">
+        <label>Location:</label>
+        <input type="text" id="foodLocation">
+        <label>Cooking Date & Time:</label>
+        <input type="datetime-local" id="cookingDate">
+        <label>Donor Availability:</label>
+        <input type="text" id="availability">
+        <button onclick="submitFood()">Submit Details</button>
+        <button onclick="logoutApp()">Logout</button>
+      </div>
+
+      <div id="volunteerDashboard" class="hidden">
+        <h3>Volunteer Dashboard</h3>
+        <div id="foodList"></div>
+        <button onclick="logoutApp()">Logout</button>
+      </div>
+
+      <div id="acceptForm" class="hidden">
+        <h3>Accept Food Donation</h3>
+        <label>Pickup Date & Time:</label>
+        <input type="datetime-local" id="pickupDate">
+        <label>Feedback:</label>
+        <textarea id="feedback"></textarea>
+        <button onclick="confirmAccept()">Confirm</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Agent ---------- -->
+  <section id="agent" class="hidden">
+    <h2>Become an Agent</h2>
+    <form>
+      <input type="text" placeholder="Full Name" required />
+      <input type="email" placeholder="Email" required />
+      <input type="submit" value="Register Now" />
+    </form>
+  </section>
+
+  <!-- ---------- Contact ---------- -->
+  <section id="contact" class="hidden">
+    <h2>Contact Us</h2>
+    <div style="text-align:center;">
+      <p>📞 00001111</p>
+      <p>📧 zerohunger@gmail.com</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 A World Without Empty Plates | Made with ❤️</p>
+  </footer>
+</div>
+
+<script>
+/* ---------- LOGIN ---------- */
+function validateLogin() {
+  const id = document.getElementById('login-id').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+  const errorMessage = document.getElementById('error-message');
+  if (id === "admin" && password === "1234") {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('home-page').classList.remove('hidden');
+  } else {
+    errorMessage.textContent = "Invalid ID or Password. Try again.";
+  }
+}
+
+/* ---------- NAVIGATION ---------- */
+function showSection(id) {
+  document.querySelectorAll('#home-page section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+/* ---------- DONATION ---------- */
+document.getElementById('donate-btn').addEventListener('click', function(){
+  const name = document.getElementById('donor-name').value.trim();
+  const amount = document.getElementById('donation-amount').value;
+  const country = document.getElementById('country').value.trim();
+  const out = document.getElementById('donation-response');
+  if(!name || !amount || !country){
+    out.textContent = 'Please fill all fields.';
+    return;
+  }
+  out.textContent = `Thank you, ${name}! Donation of $${parseFloat(amount).toFixed(2)} received.`;
+  out.classList.add('success');
+});
+
+/* ---------- EMBEDDED FOOD APP ---------- */
+let role = "";
+let foodDonations = [];
+let currentFoodIndex = null;
+
+function selectRole(selectedRole) {
+  role = selectedRole;
+  document.getElementById("roleSelect").classList.add("hidden");
+  document.getElementById("loginRegister").classList.remove("hidden");
+}
+function loginChoice(isLogin) {
+  document.getElementById("loginRegister").classList.add("hidden");
+  document.getElementById("authForm").classList.remove("hidden");
+  document.getElementById("authTitle").textContent = isLogin ? "Login" : "Register";
+}
+function authenticate() {
+  document.getElementById("authForm").classList.add("hidden");
+  if (role === "donor") document.getElementById("donorDashboard").classList.remove("hidden");
+  else { document.getElementById("volunteerDashboard").classList.remove("hidden"); showFoodDonations(); }
+}
+function submitFood() {
+  const food = {
+    type: document.getElementById("foodType").value,
+    location: document.getElementById("foodLocation").value,
+    date: document.getElementById("cookingDate").value,
+    availability: document.getElementById("availability").value,
+    status: "Available"
+  };
+  foodDonations.push(food);
+  alert("Food details submitted!");
+  document.getElementById("foodType").value = "";
+  document.getElementById("foodLocation").value = "";
+  document.getElementById("cookingDate").value = "";
+  document.getElementById("availability").value = "";
+}
+function showFoodDonations() {
+  const list = document.getElementById("foodList");
+  list.innerHTML = "";
+  if (foodDonations.length === 0) { list.innerHTML = "<p>No food donations available.</p>"; return; }
+  foodDonations.forEach((f, i) => {
+    const item = document.createElement("div");
+    item.style.border = "1px solid #ccc";
+    item.style.padding = "10px";
+    item.style.margin = "10px 0";
+    item.innerHTML = `
+      <p><strong>Type:</strong> ${f.type}</p>
+      <p><strong>Location:</strong> ${f.location}</p>
+      <p><strong>Date:</strong> ${f.date}</p>
+      <p><strong>Availability:</strong> ${f.availability}</p>
+      <p><strong>Status:</strong> ${f.status}</p>
+      <button onclick="acceptFood(${i})">Accept</button>
+      <button onclick="rejectFood(${i})">Reject</button>
+    `;
+    list.appendChild(item);
+  });
+}
+function acceptFood(i) {
+  currentFoodIndex = i;
+  document.getElementById("volunteerDashboard").classList.add("hidden");
+  document.getElementById("acceptForm").classList.remove("hidden");
+}
+function rejectFood(i) {
+  foodDonations[i].status = "Rejected";
+  alert("You rejected this donation.");
+  logoutApp();
+}
+function confirmAccept() {
+  const pickup = document.getElementById("pickupDate").value;
+  const feedback = document.getElementById("feedback").value;
+  foodDonations[currentFoodIndex].status = `Accepted (Pickup: ${pickup}, Feedback: ${feedback})`;
+  alert("Donation accepted successfully!");
+  logoutApp();
+}
+function logoutApp() {
+  role = "";
+  currentFoodIndex = null;
+  document.querySelectorAll(".container > div").forEach(d => d.classList.add("hidden"));
+  document.getElementById("roleSelect").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
